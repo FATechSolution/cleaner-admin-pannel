@@ -21,6 +21,8 @@ import {
   Card,
   CardContent,
   alpha,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -28,8 +30,12 @@ import {
   Inbox as InboxIcon,
   Schedule as ScheduleIcon,
   Assignment as AssignmentIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
 } from '@mui/icons-material';
-import { getBookings, Booking } from '../../api/admin/bookingApi';
+import { getBookings, Booking, deleteBooking, editBooking } from '../../api/admin/bookingApi';
+import ConfirmDialog from '../../components/ConfirmDialog';
+import EditBookingDialog from '../../components/EditBookingDialog';
 
 const BookingsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,6 +45,9 @@ const BookingsPage = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -68,6 +77,42 @@ const BookingsPage = () => {
   const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
+  };
+
+  const handleEditClick = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setOpenEdit(true);
+  };
+
+  const handleDeleteClick = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setOpenDelete(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedBooking) return;
+    try {
+      await deleteBooking(selectedBooking._id);
+      setOpenDelete(false);
+      setSelectedBooking(null);
+      fetchData();
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete booking');
+    }
+  };
+
+  const handleEditSave = async (data: any) => {
+    if (!selectedBooking) return;
+    try {
+      await editBooking(selectedBooking._id, data);
+      setOpenEdit(false);
+      setSelectedBooking(null);
+      fetchData();
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to update booking');
+    }
   };
 
   const paginatedBookings = filteredBookings.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -207,6 +252,7 @@ const BookingsPage = () => {
               <TableCell>Schedule</TableCell>
               <TableCell>Payment</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -263,10 +309,10 @@ const BookingsPage = () => {
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" fontWeight="medium">
-                        ${booking.payment.amount.toFixed(2)}
+                        ${(booking.payment?.amount || 0).toFixed(2)}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {booking.payment.status}
+                        {booking.payment?.status || 'pending'}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -280,6 +326,40 @@ const BookingsPage = () => {
                           fontWeight: 'medium',
                         }}
                       />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+                        <Tooltip title="Edit Booking" arrow>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEditClick(booking)}
+                            sx={{
+                              color: 'primary.main',
+                              '&:hover': {
+                                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                              },
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete Booking" arrow>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDeleteClick(booking)}
+                            sx={{
+                              color: 'error.main',
+                              '&:hover': {
+                                bgcolor: alpha(theme.palette.error.main, 0.1),
+                              },
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 );
@@ -312,6 +392,31 @@ const BookingsPage = () => {
           </Box>
         )}
       </Paper>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        open={openDelete}
+        title="Delete Booking"
+        description={`Are you sure you want to delete the booking for ${selectedBooking?.serviceType}? This action cannot be undone.`}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => {
+          setOpenDelete(false);
+          setSelectedBooking(null);
+        }}
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
+
+      {/* Edit Booking Dialog */}
+      <EditBookingDialog
+        open={openEdit}
+        booking={selectedBooking}
+        onClose={() => {
+          setOpenEdit(false);
+          setSelectedBooking(null);
+        }}
+        onSave={handleEditSave}
+      />
     </Box>
   );
 };

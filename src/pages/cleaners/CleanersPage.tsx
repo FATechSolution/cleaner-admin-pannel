@@ -24,6 +24,7 @@ import {
   CardContent,
   alpha,
   Chip,
+  Button,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -36,6 +37,7 @@ import {
   Email as EmailIcon,
   LocationOn as LocationIcon,
   CalendarToday as CalendarIcon,
+  Download as DownloadIcon,
 } from '@mui/icons-material';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import EditCleanerDialog from '../../components/EditCleanerDialog';
@@ -127,6 +129,42 @@ const CleanersPage = () => {
 
   const paginatedCleaners = filteredCleaners.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+  const handleExportExcel = () => {
+    if (cleaners.length === 0) {
+      alert('No data to export');
+      return;
+    }
+
+    // Create CSV data
+    const headers = ['First Name', 'Last Name', 'Email', 'Phone', 'City', 'Joined Date'];
+    const rows = cleaners.map(cleaner => [
+      cleaner.firstName || '',
+      cleaner.lastName || '',
+      cleaner.cleanerEmail || '',
+      cleaner.phoneNo || '',
+      cleaner.city || '',
+      new Date(cleaner.createdAt).toLocaleDateString('en-US')
+    ]);
+
+    // Create CSV content
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `cleaners-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       {/* Header Section */}
@@ -174,6 +212,21 @@ const CleanersPage = () => {
                   }
                 }}
               />
+              <Button
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                onClick={handleExportExcel}
+                sx={{
+                  bgcolor: 'white',
+                  color: '#10ac84',
+                  fontWeight: 'bold',
+                  '&:hover': {
+                    bgcolor: 'rgba(255,255,255,0.9)',
+                  }
+                }}
+              >
+                Export Excel
+              </Button>
             </Stack>
           </Stack>
         </CardContent>

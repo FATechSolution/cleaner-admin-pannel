@@ -84,23 +84,30 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile hamburger button */}
+      {/* Mobile hamburger button - fully responsive */}
       <IconButton
         onClick={toggleSidebar}
         sx={{
           position: 'fixed',
-          top: 16,
-          left: 16,
+          top: { xs: 12, sm: 16 },
+          left: { xs: 12, sm: 16 },
           zIndex: 1300,
-          display: { lg: 'none' },
+          display: { xs: 'flex', lg: 'none' },
           background: 'linear-gradient(45deg, #6366f1, #8b5cf6)',
           color: 'white',
+          width: { xs: '48px', sm: '56px' },
+          height: { xs: '48px', sm: '56px' },
           '&:hover': {
             background: 'linear-gradient(45deg, #4f46e5, #7c3aed)',
             transform: 'scale(1.05)',
           },
           transition: 'all 0.2s ease',
           boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
+          '& svg': {
+            fontSize: { xs: '1.5rem', sm: '1.75rem' },
+          },
+          pointerEvents: 'auto',
+          cursor: 'pointer',
         }}
       >
         <MenuIcon />
