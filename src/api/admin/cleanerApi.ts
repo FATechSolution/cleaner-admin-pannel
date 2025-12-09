@@ -36,7 +36,7 @@ export interface CleanerPayload {
 }
 
 export const getCleaners = async (): Promise<Cleaner[]> => {
-  const res = await fetch(`${BASE_URL}/api/admin/cleaners`);
+  const res = await fetch(`${BASE_URL}/admin/cleaners`);
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
@@ -45,7 +45,7 @@ export const getCleaners = async (): Promise<Cleaner[]> => {
 };
 
 export const getSingleCleaner = async (id: string): Promise<Cleaner> => {
-  const res = await fetch(`${BASE_URL}/api/admin/cleaners/${id}`);
+  const res = await fetch(`${BASE_URL}/admin/cleaners/${id}`);
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
@@ -54,7 +54,7 @@ export const getSingleCleaner = async (id: string): Promise<Cleaner> => {
 };
 
 export const editCleaner = async (id: string, payload: CleanerPayload): Promise<Cleaner> => {
-  const res = await fetch(`${BASE_URL}/api/admin/cleaners/${id}`, {
+  const res = await fetch(`${BASE_URL}/admin/cleaners/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -67,7 +67,7 @@ export const editCleaner = async (id: string, payload: CleanerPayload): Promise<
 };
 
 export const deleteCleaner = async (id: string): Promise<void> => {
-  const res = await fetch(`${BASE_URL}/api/admin/cleaners/${id}`, { 
+  const res = await fetch(`${BASE_URL}/admin/cleaners/${id}`, { 
     method: 'DELETE' 
   });
   if (!res.ok) {

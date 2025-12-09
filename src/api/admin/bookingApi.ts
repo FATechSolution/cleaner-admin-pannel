@@ -55,7 +55,7 @@ export interface BookingPayload {
 }
 
 export const getBookings = async (): Promise<Booking[]> => {
-  const res = await fetch(`${BASE_URL}/api/admin/bookings`);
+  const res = await fetch(`${BASE_URL}/admin/bookings`);
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
@@ -64,7 +64,7 @@ export const getBookings = async (): Promise<Booking[]> => {
 };
 
 export const getSingleBooking = async (id: string): Promise<Booking> => {
-  const res = await fetch(`${BASE_URL}/api/admin/bookings/${id}`);
+  const res = await fetch(`${BASE_URL}/admin/bookings/${id}`);
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
@@ -73,7 +73,7 @@ export const getSingleBooking = async (id: string): Promise<Booking> => {
 };
 
 export const editBooking = async (id: string, payload: BookingPayload): Promise<Booking> => {
-  const res = await fetch(`${BASE_URL}/api/admin/bookings/${id}`, {
+  const res = await fetch(`${BASE_URL}/admin/bookings/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -86,7 +86,7 @@ export const editBooking = async (id: string, payload: BookingPayload): Promise<
 };
 
 export const deleteBooking = async (id: string): Promise<void> => {
-  const res = await fetch(`${BASE_URL}/api/admin/bookings/${id}`, { 
+  const res = await fetch(`${BASE_URL}/admin/bookings/${id}`, { 
     method: 'DELETE' 
   });
   if (!res.ok) {

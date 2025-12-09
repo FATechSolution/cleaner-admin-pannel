@@ -1,16 +1,15 @@
-// Local development uses setupProxy.js to route /api calls to the backend
-// setupProxy intercepts /api and sends to http://35.182.1.229:6000/api
-// Production uses Vercel rewrites (vercel.json) to route /api to backend
-const isProduction = process.env.NODE_ENV === 'production';
+// Always use /api for local development - setupProxy.js will forward to backend
+// This avoids browser's unsafe port blocking (port 6000 is blocked by browsers)
 
-// Use environment variable for backend URL if available
-const backendURL = process.env.REACT_APP_API_URL || (
-  isProduction
-    ? '/api' // Production - use Vercel reverse proxy
-    : 'http://35.182.1.229:6000'  // Local HTTP backend
-);
+export const BASE_URL = '/api';
 
-export const BASE_URL = isProduction
-  ? backendURL // Production - reverse proxy via Vercel (/api)
-  : '/api'; // Local development - proxy will handle routing
+console.log('[baseUrl] BASE_URL:', BASE_URL);
+console.log('[baseUrl] Environment:', process.env.NODE_ENV);
+console.log('[baseUrl] Using local proxy - backend forwarded by setupProxy.js');
+
+
+
+
+
+
 

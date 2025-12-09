@@ -29,7 +29,7 @@ export interface ClientPayload {
 }
 
 export const getClients = async (): Promise<Client[]> => {
-  const res = await fetch(`${BASE_URL}/api/admin/clients`);
+  const res = await fetch(`${BASE_URL}/admin/clients`);
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
@@ -38,7 +38,7 @@ export const getClients = async (): Promise<Client[]> => {
 };
 
 export const getSingleClient = async (id: string): Promise<Client> => {
-  const res = await fetch(`${BASE_URL}/api/admin/clients/${id}`);
+  const res = await fetch(`${BASE_URL}/admin/clients/${id}`);
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
@@ -47,7 +47,7 @@ export const getSingleClient = async (id: string): Promise<Client> => {
 };
 
 export const editClient = async (id: string, payload: ClientPayload): Promise<Client> => {
-  const res = await fetch(`${BASE_URL}/api/admin/clients/${id}`, {
+  const res = await fetch(`${BASE_URL}/admin/clients/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -60,7 +60,7 @@ export const editClient = async (id: string, payload: ClientPayload): Promise<Cl
 };
 
 export const deleteClient = async (id: string): Promise<void> => {
-  const res = await fetch(`${BASE_URL}/api/admin/clients/${id}`, { 
+  const res = await fetch(`${BASE_URL}/admin/clients/${id}`, { 
     method: 'DELETE' 
   });
   if (!res.ok) {

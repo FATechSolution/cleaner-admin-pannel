@@ -68,7 +68,7 @@ export interface RecentActivity {
 }
 
 export const getDashboardStats = async (): Promise<DashboardStats> => {
-  const res = await fetch(`${BASE_URL}/api/admin/analytics/dashboard`);
+  const res = await fetch(`${BASE_URL}/admin/analytics/dashboard`);
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
