@@ -1,11 +1,11 @@
-// Always use /api for local development - setupProxy.js will forward to backend
-// This avoids browser's unsafe port blocking (port 6000 is blocked by browsers)
+// Local development: package.json proxy forwards /api to backend
+// Vercel production: vercel.json reverse proxy forwards /api to backend
+// Both use /api - the deployment platform handles forwarding
 
 export const BASE_URL = '/api';
 
 console.log('[baseUrl] BASE_URL:', BASE_URL);
 console.log('[baseUrl] Environment:', process.env.NODE_ENV);
-console.log('[baseUrl] Using local proxy - backend forwarded by setupProxy.js');
 
 
 
