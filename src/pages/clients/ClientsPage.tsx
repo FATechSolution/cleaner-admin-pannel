@@ -17,6 +17,7 @@ import {
   IconButton,
   Stack,
   useTheme,
+  useMediaQuery,
   Skeleton,
   Alert,
   Fade,
@@ -120,9 +121,11 @@ const ClientsPage = () => {
   const paginated = filteredClients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', p: { xs: 0, sm: 1 } }}>
       {/* Header Section */}
       <Card sx={{ 
         mb: 3, 
