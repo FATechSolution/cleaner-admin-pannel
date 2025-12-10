@@ -8,6 +8,7 @@ import ClientsPage from './pages/clients/ClientsPage';
 import CleanersPage from './pages/cleaners/CleanersPage';
 import JobsPage from './pages/bookings/JobsPage';
 import AnalyticsPage from './pages/analytics/AnalyticsPage';
+import PriceRequestsPage from './pages/pricing/PriceRequestsPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                     <Route path="/clients" element={<ClientsPage />} />
                     <Route path="/cleaners" element={<CleanersPage />} />
                     <Route path="/bookings" element={<JobsPage />} />
+                    <Route path="/price-requests" element={<PriceRequestsPage />} />
                   </Routes>
                 </Layout>
               </ProtectedRoute>

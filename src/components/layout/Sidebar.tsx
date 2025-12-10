@@ -77,7 +77,15 @@ const Sidebar = () => {
       icon: WorkIcon,
       color: '#f57c00'
     },
-   
+  ];
+
+  const additionalItems = [
+    { 
+      title: 'Price Requests', 
+      path: '/price-requests', 
+      icon: FlashOnIcon,
+      color: '#0288d1'
+    },
   ];
 
 
@@ -249,6 +257,109 @@ const Sidebar = () => {
                             background: isActive 
                               ? item.color
                               : hoveredItem === item.path
+                                ? item.color
+                                : alpha(item.color, 0.1),
+                            color: isActive || hoveredItem === item.path ? 'white' : item.color,
+                            transition: 'all 0.3s ease',
+                            transform: isActive ? 'scale(1.1)' : 'scale(1)',
+                            boxShadow: isActive ? `0 4px 12px ${alpha(item.color, 0.3)}` : 'none',
+                          }}
+                        >
+                          <IconComponent sx={{ fontSize: 20 }} />
+                        </Box>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.title}
+                        primaryTypographyProps={{
+                          fontWeight: isActive ? 600 : 500,
+                          color: isActive ? item.color : 'text.primary',
+                          fontSize: '0.95rem',
+                        }}
+                      />
+                      <Fade in={isActive}>
+                        <ChevronRightIcon 
+                          sx={{ 
+                            color: item.color, 
+                            fontSize: 20,
+                            opacity: isActive ? 1 : 0,
+                            transform: isActive ? 'translateX(0)' : 'translateX(-8px)',
+                            transition: 'all 0.3s ease',
+                          }} 
+                        />
+                      </Fade>
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+            </List>
+
+            {/* Additional Section */}
+            <Box sx={{ mt: 2, mb: 1, px: 2 }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, letterSpacing: '0.5px' }}>
+                SETTINGS
+              </Typography>
+            </Box>
+            
+            <List sx={{ p: 0 }}>
+              {additionalItems.map((item) => {
+                const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
+                const IconComponent = item.icon;
+                
+                return (
+                  <ListItem key={item.path} sx={{ px: 1, py: 0.5 }}>
+                    <ListItemButton
+                      component={Link}
+                      to={item.path}
+                      onMouseEnter={() => setHoveredItem(item.path)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      sx={{
+                        borderRadius: 3,
+                        py: 1.5,
+                        px: 2,
+                        mb: 0.5,
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transform: hoveredItem === item.path ? 'scale(1.02)' : 'scale(1)',
+                        background: isActive 
+                          ? alpha(item.color, 0.15)
+                          : hoveredItem === item.path 
+                            ? alpha(item.color, 0.08)
+                            : 'transparent',
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          left: 0,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          width: 4,
+                          height: isActive ? 24 : 0,
+                          background: item.color,
+                          borderRadius: '0 4px 4px 0',
+                          transition: 'height 0.3s ease',
+                        },
+                        '&:hover': {
+                          background: alpha(item.color, 0.12),
+                        },
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 48,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 2,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: isActive || hoveredItem === item.path
                                 ? item.color
                                 : alpha(item.color, 0.1),
                             color: isActive || hoveredItem === item.path ? 'white' : item.color,

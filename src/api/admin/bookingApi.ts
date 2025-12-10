@@ -94,3 +94,43 @@ export const deleteBooking = async (id: string): Promise<void> => {
   }
 };
 
+export const updateBookingStatus = async (
+  id: string, 
+  status: 'accepted' | 'rejected' | 'new'
+): Promise<Booking> => {
+  const res = await fetch(`${BASE_URL}/admin/bookings/${id}/status`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) {
+    throw new Error(`API Error: ${res.status} ${res.statusText}`);
+  }
+  const json = await res.json();
+  return json.booking;
+};
+
+export interface BookingSummary {
+  totalBookings: number;
+  byStatus: {
+    new: number;
+    accepted: number;
+    rejected: number;
+  };
+  byCleaningStatus: {
+    confirmed: number;
+    on_the_way: number;
+    in_progress: number;
+    completed: number;
+  };
+  totalRevenue: number;
+}
+
+export const getBookingSummary = async (): Promise<BookingSummary> => {
+  const res = await fetch(`${BASE_URL}/admin/bookings/summary`);
+  if (!res.ok) {
+    throw new Error(`API Error: ${res.status} ${res.statusText}`);
+  }
+  const json = await res.json();
+  return json.data;
+};

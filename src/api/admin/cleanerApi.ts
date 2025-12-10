@@ -18,6 +18,7 @@ export interface Cleaner {
   onboardingCompleted?: boolean;
   bankVerified?: boolean;
   availabilityStatus?: 'online' | 'offline';
+  pricePerHour?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -73,5 +74,29 @@ export const deleteCleaner = async (id: string): Promise<void> => {
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
   }
+};
+
+export const resetCleanerPassword = async (id: string, newPassword: string): Promise<void> => {
+  const res = await fetch(`${BASE_URL}/admin/cleaners/${id}/reset-password`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ newPassword }),
+  });
+  if (!res.ok) {
+    throw new Error(`API Error: ${res.status} ${res.statusText}`);
+  }
+};
+
+export const updateAvailabilityStatus = async (id: string, status: 'online' | 'offline'): Promise<Cleaner> => {
+  const res = await fetch(`${BASE_URL}/admin/cleaners/${id}/availability`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ availabilityStatus: status }),
+  });
+  if (!res.ok) {
+    throw new Error(`API Error: ${res.status} ${res.statusText}`);
+  }
+  const json = await res.json();
+  return json.data;
 };
 

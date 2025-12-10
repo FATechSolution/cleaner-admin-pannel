@@ -295,6 +295,7 @@ const CleanersPage = () => {
                 <TableCell sx={{ fontWeight: 'bold', color: 'text.primary' }}>Cleaner</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'text.primary' }}>Contact</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'text.primary' }}>Location</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'text.primary' }}>Price/Hour</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'text.primary' }}>Joined</TableCell>
                 <TableCell align="right" sx={{ fontWeight: 'bold', color: 'text.primary' }}>Actions</TableCell>
               </TableRow>
@@ -397,6 +398,17 @@ const CleanersPage = () => {
                           {cleaner.city || 'Not specified'}
                         </Typography>
                       </Stack>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={cleaner.pricePerHour ? `$${cleaner.pricePerHour.toFixed(2)}` : 'Not Set'}
+                        size="small"
+                        sx={{
+                          bgcolor: cleaner.pricePerHour ? alpha(theme.palette.success.main, 0.1) : alpha(theme.palette.grey[500], 0.1),
+                          color: cleaner.pricePerHour ? 'success.main' : 'text.secondary',
+                          fontWeight: 'bold',
+                        }}
+                      />
                     </TableCell>
                     <TableCell>
                       <Stack direction="row" alignItems="center" spacing={1}>

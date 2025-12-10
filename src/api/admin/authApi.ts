@@ -77,8 +77,12 @@ export const verifyToken = async (token: string): Promise<Admin> => {
       const json = await res.json();
       return json.data;
     }
+    // If 404, backend endpoint not implemented yet
+    if (res.status === 404) {
+      // Silent fallback to mock
+    }
   } catch (err) {
-    console.warn('Backend verify endpoint not available');
+    // Network error or backend not available - silent fallback
   }
 
   // Mock verification for local tokens
